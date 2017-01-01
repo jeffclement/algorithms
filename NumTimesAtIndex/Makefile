@@ -1,3 +1,9 @@
+ifeq ($(OS),Windows_NT)
+	WINDOWS = 1
+else
+	WINDOWS = 0
+endif
+
 MPI_HOME=/directory/mpich
 MPI_INCL=$(MPI_HOME)/include
 MPI_LIB=$(MPI_HOME)/lib
@@ -36,7 +42,11 @@ GLUIDIR       = /usr
 
 # And also note the different library names for the glu, gl, and glut libraries
 # Define location of OpenGL and GLU libraries along with their lib names
-GL_LIBS       = -L/lib -lglu32 -lopengl32 
+ifeq ($WINDOWS, 1)
+  GL_LIBS       = -L/lib -lglu32 -lopengl32 
+else
+  GL_LIBS       = -L/lib 
+endif
 
 # Define location of Glut libraries along with glut lib name
 #GLUT_LIBS     = -L/lib -lglut32 -lglut
@@ -51,7 +61,11 @@ XLIBDIR       = /usr/include
 
 # Define location of X Windows libraries,  and the X11 library names
 #XLIBS         = -L/usr/X11R6/lib -lX11 -lXi -lXmu
-XLIBS         = -L/usr/X11R6/lib -lX11 -lXi
+ifeq ($WINDOWS, 1)
+  XLIBS         = -L/usr/X11R6/lib -lX11 -lXi
+else
+  XLIBS         = -L/usr/X11R6/lib -lX11
+endif
 
 # Define the location of the destination directory for the executable file
 DEST	      = .
@@ -63,7 +77,7 @@ LDFLAGS	      =
 LIBS          = $(GLUI_LIBS) $(GL_LIBS) $(GLUT_LIBS) -lm $(XLIBS) -ldl
 
 #LIBS_AFTER = -lm -lGL -lGLU -lglut
-LIBS_AFTER = -lm -lGL 
+LIBS_AFTER = -lm
 
 # Define linker
 LINKER	      = g++
